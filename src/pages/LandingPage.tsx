@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const highlights = [
   {
     icon: '🧩',
@@ -92,8 +94,8 @@ export default function LandingPage() {
             <a href="#features">亮点</a>
             <a href="#logbook">AI 复盘</a>
             <a href="#route">航线演示</a>
-            <a href="/privacy">隐私政策</a>
-            <a href="/terms">用户协议</a>
+            <Link to="/privacy">隐私政策</Link>
+            <Link to="/terms">用户协议</Link>
             <a href="#cta" className="lp-nav-cta">
               立即登船
             </a>
