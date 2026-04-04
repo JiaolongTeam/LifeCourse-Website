@@ -1,7 +1,82 @@
 const highlights = [
-  { title: '拆目标', desc: '把大目标变成一段段清晰航程。' },
-  { title: '看进度', desc: '当前与预期并排显示，不再迷路。' },
-  { title: 'AI 纠偏', desc: '偏航时自动给出预测和下一步建议。' },
+  {
+    icon: '🧩',
+    title: '拆解目标',
+    desc: '长期目标 -> 周任务',
+  },
+  {
+    icon: '📊',
+    title: '进度对齐',
+    desc: '当前值 vs 理论值',
+  },
+  {
+    icon: '🧭',
+    title: '偏航预警',
+    desc: '落后/超前 一眼看清',
+  },
+  {
+    icon: '🤖',
+    title: 'AI 复盘',
+    desc: '自动生成航行日志',
+  },
+]
+
+const metrics = [
+  { icon: '🟢', label: '当前进度', value: '42%' },
+  { icon: '🎯', label: '理论进度', value: '58%' },
+  { icon: '⚠️', label: '偏差状态', value: '落后 16%' },
+  { icon: '📅', label: '预计完成', value: '延后 9 天' },
+]
+
+const journeySteps = [
+  { icon: '🏁', label: '设定终点' },
+  { icon: '🧩', label: '拆解里程碑' },
+  { icon: '✅', label: '周度推进' },
+  { icon: '📡', label: '偏差预警' },
+  { icon: '🤖', label: 'AI 复盘' },
+  { icon: '🚀', label: '持续纠偏' },
+]
+
+const logEntries = [
+  {
+    date: '2026.04.01',
+    time: '21:30',
+    type: '周复盘',
+    title: '里程碑推进掉速',
+    status: '轻微偏航',
+    progress: '-6%',
+    eta: '预计延后 3 天',
+    summary: '关键路径执行不足，任务切换过频影响深度推进。',
+    advice: '本周只保留 2 个关键任务，其他事项统一延后处理。',
+  },
+  {
+    date: '2026.03.25',
+    time: '22:10',
+    type: '周复盘',
+    title: '节奏恢复到航线',
+    status: '已纠偏',
+    progress: '+4%',
+    eta: '追回 2 天',
+    summary: '晨间深度时段连续执行，关键任务完成率显著提升。',
+    advice: '保持晨间 90 分钟专注区块，避免午后追加高认知任务。',
+  },
+  {
+    date: '2026.03.18',
+    time: '20:45',
+    type: '周复盘',
+    title: '整体推进稳定',
+    status: '稳定推进',
+    progress: '+1%',
+    eta: '按期完成',
+    summary: '执行节奏平稳，风险点可控，当前仍在计划航道内。',
+    advice: '维持现有节奏，并提前准备下一阶段里程碑拆解。',
+  },
+]
+
+const heroStats = [
+  { icon: '🎯', value: '12', label: '活跃目标' },
+  { icon: '⚡', value: '89%', label: '节奏达成' },
+  { icon: '🧠', value: '24', label: '复盘次数' },
 ]
 
 export default function LandingPage() {
@@ -15,9 +90,12 @@ export default function LandingPage() {
           </div>
           <nav className="lp-nav">
             <a href="#features">亮点</a>
+            <a href="#logbook">AI 复盘</a>
             <a href="#route">航线演示</a>
+            <a href="/privacy">隐私政策</a>
+            <a href="/terms">用户协议</a>
             <a href="#cta" className="lp-nav-cta">
-              开始试飞
+              立即登船
             </a>
           </nav>
         </div>
@@ -27,19 +105,27 @@ export default function LandingPage() {
         <section className="lp-hero">
           <div className="lp-container lp-hero-grid">
             <div className="lp-hero-copy">
-              <p className="lp-kicker">Life Navigation</p>
-              <h1>让目标像飞行一样，有航线、有仪表、有纠偏</h1>
-              <p className="lp-lead">
-                人生航线帮你拆解目标、追踪进度、定期 AI 复盘。掉速时，系统会先预测再给建议，让你轻松回到正轨。
-              </p>
+              <p className="lp-kicker">LifeCourse</p>
+              <h1>人生航线：把目标拆成航程，让每一步都可被看见</h1>
+              <p className="lp-lead">拆目标、看偏差、做复盘。少焦虑，多前进。</p>
               <div className="lp-hero-tags">
-                <span>低负担记录</span>
-                <span>每周自动复盘</span>
-                <span>偏航提前预警</span>
+                <span>目标拆解</span>
+                <span>理论值对齐</span>
+                <span>提前/延后预测</span>
+                <span>定期 AI 航行日志</span>
               </div>
               <div className="lp-actions">
-                <button className="lp-btn lp-btn-primary">立即体验</button>
-                <button className="lp-btn">看 30 秒演示</button>
+                <button className="lp-btn lp-btn-primary">开始规划我的航线</button>
+                <button className="lp-btn lp-btn-ghost">查看航线演示</button>
+              </div>
+              <div className="lp-hero-stats">
+                {heroStats.map((item) => (
+                  <span key={item.label}>
+                    <em aria-hidden="true">{item.icon}</em>
+                    <strong>{item.value}</strong>
+                    <small>{item.label}</small>
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -87,20 +173,34 @@ export default function LandingPage() {
               </svg>
 
               <div className="lp-mini-panel">
-                <span>当前进度 42%</span>
-                <span>预期 58%</span>
+                {metrics.map((item) => (
+                  <span key={item.label}>
+                    <em aria-hidden="true">{item.icon}</em>
+                    <strong>{item.value}</strong>
+                    {item.label}
+                  </span>
+                ))}
               </div>
-              <p className="lp-mini-tip">轻微偏航：建议将本周关键任务拆为 2 段短航程。</p>
+              <p className="lp-mini-tip">⚠ 偏航：本周先聚焦 2 个关键任务。</p>
             </div>
           </div>
         </section>
 
         <section id="features" className="lp-section lp-section-soft">
           <div className="lp-container">
-            <h2>三个核心亮点</h2>
+            <div className="lp-section-head">
+              <p className="lp-section-kicker">Capabilities</p>
+              <h2>四个核心能力</h2>
+            </div>
             <div className="lp-feature-grid">
-              {highlights.map((item) => (
+              {highlights.map((item, index) => (
                 <article key={item.title} className="lp-feature-card">
+                  <div className="lp-feature-top">
+                    <span className="lp-feature-icon" aria-hidden="true">
+                      {item.icon}
+                    </span>
+                    <span className="lp-feature-no">0{index + 1}</span>
+                  </div>
                   <h3>{item.title}</h3>
                   <p>{item.desc}</p>
                 </article>
@@ -112,12 +212,58 @@ export default function LandingPage() {
         <section className="lp-section">
           <div className="lp-container">
             <div className="lp-journey">
-              <h2>一条轻松的目标航线</h2>
+              <h2>航线流程</h2>
               <div className="lp-journey-line">
-                <span>设定终点</span>
-                <span>每周更新</span>
-                <span>AI 复盘</span>
-                <span>纠偏前进</span>
+                {journeySteps.map((item) => (
+                  <div key={item.label} className="lp-journey-step">
+                    <span className="lp-step-node" aria-hidden="true">
+                      {item.icon}
+                    </span>
+                    <span className="lp-step-label">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="logbook" className="lp-section">
+          <div className="lp-container">
+            <div className="lp-logbook">
+              <div className="lp-logbook-intro">
+                <h2>AI 航行日志</h2>
+                <p>每周自动沉淀复盘记录，像日志一样连续追踪你的航线变化。</p>
+                <div className="lp-logbook-badges">
+                  <span>自动记录</span>
+                  <span>偏差追踪</span>
+                  <span>AI 建议</span>
+                </div>
+              </div>
+              <div className="lp-logbook-list">
+                {logEntries.map((item) => (
+                  <article key={item.title + item.date} className="lp-log-card">
+                    <div className="lp-log-time">
+                      <span>{item.date}</span>
+                      <small>{item.time}</small>
+                    </div>
+                    <div className="lp-log-content">
+                      <div className="lp-log-head">
+                        <em>{item.type}</em>
+                        <strong>{item.title}</strong>
+                        <span>{item.status}</span>
+                      </div>
+                      <div className="lp-log-metrics">
+                        <small>进度 {item.progress}</small>
+                        <small>{item.eta}</small>
+                      </div>
+                      <p className="lp-log-summary">{item.summary}</p>
+                      <div className="lp-log-advice">
+                        <b>AI 建议</b>
+                        <span>{item.advice}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
               </div>
             </div>
           </div>
@@ -126,10 +272,10 @@ export default function LandingPage() {
         <section id="cta" className="lp-section">
           <div className="lp-container lp-cta">
             <div>
-              <h2>准备起飞你的新目标了吗？</h2>
-              <p>把压力变成节奏，把“偏航”变成“修正”。</p>
+              <h2>希望你的人生不会偏航</h2>
+              <p>现在，开始第一条航线。</p>
             </div>
-            <button className="lp-btn lp-btn-primary">获取体验入口</button>
+            <button className="lp-btn lp-btn-primary">获取人生航线体验入口</button>
           </div>
         </section>
       </main>
