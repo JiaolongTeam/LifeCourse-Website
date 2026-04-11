@@ -29,8 +29,8 @@ const contentByLocale = {
   zh: {
     nav: navZh,
     hero: {
-      kicker: '目标轨迹系统',
-      title: '清楚看到执行偏离计划的那一刻。',
+      kicker: '目标拆解 x 进度校准 x AI复盘',
+      title: '人生航线 - 目标校准与复盘',
       lead: 'LifeCourse 将目标拆解为里程碑，持续对比实际进度与预期进度，在延迟放大前完成路径修正。',
       tags: ['实际 vs 预期', '任务级偏差', '提前 / 延后预测'],
       primaryCta: '加入内测',
