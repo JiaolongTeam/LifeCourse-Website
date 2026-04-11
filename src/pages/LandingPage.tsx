@@ -76,6 +76,37 @@ const contentByLocale = {
         },
       ],
     },
+    showcase: {
+      kicker: '核心功能展示',
+      title: '用真实页面快速理解 LifeCourse 的工作流。',
+      carouselAria: '应用核心功能截图横向滚动展示',
+      items: [
+        {
+          key: 'list',
+          title: '目标列表',
+          description: '集中查看全部目标状态，快速定位需要优先推进的项目。',
+          alt: 'LifeCourse 目标列表页面截图',
+        },
+        {
+          key: 'detail',
+          title: '目标详情页',
+          description: '围绕单个目标查看里程碑、任务拆解与节奏变化。',
+          alt: 'LifeCourse 目标详情页截图',
+        },
+        {
+          key: 'subProgress',
+          title: '子进度',
+          description: '按子任务跟踪推进状态，及时发现局部阻塞和偏差。',
+          alt: 'LifeCourse 子进度页面截图',
+        },
+        {
+          key: 'aiReview',
+          title: 'AI 复盘',
+          description: '自动总结阶段表现并给出可执行的下一步调整建议。',
+          alt: 'LifeCourse AI 复盘页面截图',
+        },
+      ],
+    },
     howItWorks: {
       kicker: '运行方式',
       title: '四步循环，稳定推进。',
@@ -184,6 +215,37 @@ const contentByLocale = {
         },
       ],
     },
+    showcase: {
+      kicker: 'PRODUCT WALKTHROUGH',
+      title: 'Understand core workflows through real app screens.',
+      carouselAria: 'Scrolling strip of app feature screenshots',
+      items: [
+        {
+          key: 'list',
+          title: 'Goal list',
+          description: 'View all goals in one place and quickly spot what needs priority.',
+          alt: 'LifeCourse goal list screenshot',
+        },
+        {
+          key: 'detail',
+          title: 'Goal detail',
+          description: 'Inspect milestones, task structure, and pacing for a single goal.',
+          alt: 'LifeCourse goal detail screenshot',
+        },
+        {
+          key: 'subProgress',
+          title: 'Sub progress',
+          description: 'Track child-level execution and surface local blockers early.',
+          alt: 'LifeCourse sub progress screenshot',
+        },
+        {
+          key: 'aiReview',
+          title: 'AI review',
+          description: 'Generate concise reflections with actionable next-step suggestions.',
+          alt: 'LifeCourse AI review screenshot',
+        },
+      ],
+    },
     howItWorks: {
       kicker: 'HOW IT WORKS',
       title: 'Four steps, one stable operating loop.',
@@ -246,6 +308,15 @@ const contentByLocale = {
 
 export default function LandingPage() {
   const [locale, setLocale] = useState<Locale>('zh')
+  const [reduceMotion, setReduceMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  )
+  const showcaseImageByKey = {
+    aiReview: new URL('../assets/demo/aiReview.PNG', import.meta.url).href,
+    detail: new URL('../assets/demo/detail.PNG', import.meta.url).href,
+    list: new URL('../assets/demo/list.PNG', import.meta.url).href,
+    subProgress: new URL('../assets/demo/subProgress.PNG', import.meta.url).href,
+  } as const
 
   useEffect(() => {
     const saved = window.localStorage.getItem(LOCALE_STORAGE_KEY)
@@ -254,7 +325,20 @@ export default function LandingPage() {
     }
   }, [])
 
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setReduceMotion(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
   const t = useMemo(() => contentByLocale[locale], [locale])
+
+  const showcaseMarqueeItems = useMemo(() => {
+    const items = t.showcase.items
+    return reduceMotion ? [...items] : [...items, ...items]
+  }, [reduceMotion, t.showcase.items])
 
   const handleLocaleChange = (nextLocale: Locale) => {
     setLocale(nextLocale)
@@ -339,6 +423,45 @@ export default function LandingPage() {
                   </div>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="showcase" className="lp-section">
+          <div className="lp-container lp-section-grid">
+            <div className="lp-section-intro">
+              <p className="lp-kicker">{t.showcase.kicker}</p>
+              <h2>{t.showcase.title}</h2>
+            </div>
+            <div className="lp-showcase-carousel" role="region" aria-label={t.showcase.carouselAria}>
+              {!reduceMotion ? (
+                <p className="lp-showcase-sr-only">
+                  {t.showcase.items.map((item) => `${item.title}：${item.description}`).join('。')}
+                </p>
+              ) : null}
+              <div
+                className={`lp-showcase-marquee ${reduceMotion ? 'is-static-mode' : ''}`}
+                aria-hidden={reduceMotion ? undefined : true}
+              >
+                <div className={`lp-showcase-marquee-track ${reduceMotion ? 'is-static' : ''}`}>
+                  {showcaseMarqueeItems.map((item, index) => (
+                    <article key={`${item.key}-${index}`} className="lp-showcase-card">
+                      <div className="lp-showcase-card-frame">
+                        <img
+                          src={showcaseImageByKey[item.key]}
+                          alt={reduceMotion ? item.alt : ''}
+                          className="lp-showcase-card-image"
+                          loading={index < 4 ? 'eager' : 'lazy'}
+                        />
+                      </div>
+                      <div className="lp-showcase-card-copy">
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>

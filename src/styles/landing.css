@@ -246,14 +246,14 @@ a {
   height: clamp(140px, 24vw, 220px);
   border-radius: 26%;
   object-fit: cover;
-  transform: rotate(11deg) translateY(0);
+  transform: rotate(11deg) translateX(30px) translateY(0);
   transform-origin: center;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
   box-shadow: 0 28px 56px rgba(4, 8, 22, 0.52), 0 14px 34px rgba(32, 94, 167, 0.34), 0 0 52px rgba(32, 94, 167, 0.2);
 }
 
 .lp-product-shot:hover .lp-hero-app-icon {
-  transform: rotate(7deg) translateY(-4px) scale(1.02);
+  transform: rotate(7deg) translateX(12px) translateY(-4px) scale(1.02);
   box-shadow: 0 34px 64px rgba(4, 8, 22, 0.58), 0 18px 42px rgba(32, 94, 167, 0.42), 0 0 64px rgba(32, 94, 167, 0.28);
 }
 
@@ -440,6 +440,121 @@ a {
   font-size: 12px;
   font-weight: 550;
   line-height: 1.35;
+}
+
+.lp-showcase-carousel {
+  grid-column: 5 / span 8;
+  border-radius: 12px;
+  padding: 12px 0 14px;
+  position: relative;
+}
+
+.lp-showcase-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+}
+
+.lp-showcase-marquee.is-static-mode {
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.lp-showcase-marquee-track {
+  display: flex;
+  gap: 8px;
+  width: max-content;
+  padding: 0;
+  animation: lpShowcaseMarquee 48s linear infinite;
+  will-change: transform;
+}
+
+.lp-showcase-marquee-track.is-static {
+  animation: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  row-gap: 16px;
+}
+
+.lp-showcase-marquee:hover .lp-showcase-marquee-track:not(.is-static) {
+  animation-play-state: paused;
+}
+
+.lp-showcase-card {
+  flex: 0 0 auto;
+  width: clamp(180px, 24vw, 300px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 文案紧贴截图，间距由文案内部 margin 控制 */
+  gap: 4px;
+}
+
+.lp-showcase-card-frame {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  /* 与导出截图一致 1709 × 3040 */
+  aspect-ratio: 1709 / 3040;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-showcase-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.lp-showcase-card-copy {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 14px;
+  text-align: center;
+}
+
+.lp-showcase-card-copy h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.lp-showcase-card-copy p {
+  margin: 4px 0 0;
+  padding: 0 20px;
+  padding-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--lp-muted);
+}
+
+.lp-showcase-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes lpShowcaseMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .lp-step-list {
@@ -749,10 +864,10 @@ a {
 @keyframes lpFloatTilt {
   0%,
   100% {
-    transform: rotate(11deg) translateY(0);
+    transform: rotate(11deg) translateX(30px) translateY(0);
   }
   50% {
-    transform: rotate(9deg) translateY(-8px);
+    transform: rotate(9deg) translateX(30px) translateY(-8px);
   }
 }
 
@@ -772,6 +887,7 @@ a {
 
   .lp-section-intro,
   .lp-feature-list,
+  .lp-showcase-carousel,
   .lp-step-list,
   .lp-insight-list,
   .lp-social-proof {
