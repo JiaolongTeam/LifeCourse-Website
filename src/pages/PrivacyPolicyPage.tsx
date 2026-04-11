@@ -1,65 +1,65 @@
-const sections = [
-  {
-    title: '1. 数据处理原则',
-    items: [
-      '人生航线不会收集、上传或存储任何可识别用户身份的数据。',
-      '我们不会收集昵称、头像、联系方式、账号信息等个人资料。',
-      '我们不会收集你的目标内容、进度记录、复盘日志等使用内容。',
-      '我们不会接入第三方统计、广告追踪或用户画像服务。',
-      '与功能相关的数据仅在你的设备本地处理，不会上传到我们的服务器。',
-      '我们不会基于用户数据进行分析、营销或商业化处理。',
-    ],
-  },
-  {
-    title: '2. AI 与权限说明',
-    items: [
-      'AI 复盘功能仅基于你当前设备内的数据进行结果展示。',
-      'AI 输出内容仅作为辅助建议，不构成医学、法律或投资等专业意见。',
-      '你可随时删除本地数据并停止使用相关功能。',
-      '由于我们不收集用户数据，因此不存在向第三方共享、出售或披露用户数据的情形。',
-      '应用仅在必要时申请系统权限（例如通知权限）用于本地提醒。',
-      '相关权限可在系统设置中随时关闭，不影响你对隐私数据的控制权。',
-    ],
-  },
-  {
-    title: '3. 你的控制权',
-    items: [
-      '你可以随时删除应用内本地数据或卸载应用。',
-      '如未来产品策略发生变化并涉及数据收集，我们会在变更前明确告知并征得你的同意。',
-    ],
-  },
-  {
-    title: '4. 其他说明',
-    items: [
-      '若你是未成年人，请在监护人指导下使用本服务。',
-      '我们可能根据业务变化或法律要求更新本政策，更新后会在页面显著位置提示。',
-      '如你对本政策有疑问，请通过应用内「意见反馈」与我们联系。',
-    ],
-  },
-]
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { LOCALE_STORAGE_KEY, type Locale, getStoredLocale } from '../locale'
+import { privacyByLocale } from '../content/legalLocale'
 
 export default function PrivacyPolicyPage() {
+  const [locale, setLocale] = useState<Locale>(() => getStoredLocale())
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === LOCALE_STORAGE_KEY && (e.newValue === 'zh' || e.newValue === 'en')) {
+        setLocale(e.newValue)
+      }
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  const t = useMemo(() => privacyByLocale[locale], [locale])
+
+  const handleLocaleChange = (next: Locale) => {
+    setLocale(next)
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, next)
+  }
+
   return (
     <div className="pp-page">
       <main className="pp-container">
         <header className="pp-topbar">
-          <a className="pp-back" href="/">
-            返回 LifeCourse
-          </a>
+          <div className="pp-topbar-inner">
+            <Link className="pp-back" to="/">
+              {t.backLink}
+            </Link>
+            <div className="lp-lang-switch" role="group" aria-label={t.languageLabel}>
+              <button
+                type="button"
+                className={`lp-lang-btn ${locale === 'zh' ? 'is-active' : ''}`}
+                onClick={() => handleLocaleChange('zh')}
+              >
+                中文
+              </button>
+              <button
+                type="button"
+                className={`lp-lang-btn ${locale === 'en' ? 'is-active' : ''}`}
+                onClick={() => handleLocaleChange('en')}
+              >
+                EN
+              </button>
+            </div>
+          </div>
         </header>
 
         <div className="pp-layout">
           <aside className="pp-sidebar">
-            <p className="pp-kicker">LEGAL / PRIVACY</p>
-            <h1>隐私政策</h1>
-            <p className="pp-meta">更新日期：2026 年 4 月 3 日</p>
-            <p className="pp-intro">
-              欢迎使用「人生航线」。本应用坚持最小化原则：不收集、不过度处理、不对外共享任何用户个人数据。
-            </p>
+            <p className="pp-kicker">{t.kicker}</p>
+            <h1>{t.title}</h1>
+            <p className="pp-meta">{t.meta}</p>
+            <p className="pp-intro">{t.intro}</p>
           </aside>
 
           <section className="pp-content">
-            {sections.map((section) => (
+            {t.sections.map((section) => (
               <article key={section.title} className="pp-section">
                 <h2>{section.title}</h2>
                 <ul>

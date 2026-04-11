@@ -15,6 +15,14 @@
   border-bottom: 1px solid #29292f;
 }
 
+.pp-topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
 .pp-back {
   display: inline-block;
   color: #b3b3be;
@@ -76,7 +84,6 @@
 
 .pp-content {
   grid-column: 5 / span 8;
-  border-top: 1px solid #29292f;
 }
 
 .pp-section {

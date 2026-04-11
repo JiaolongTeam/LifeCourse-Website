@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import lifeCourseIcon from '../assets/lifeCourse.png'
 import testGroupQRCode from '../assets/test-group.jpeg'
-type Locale = 'zh' | 'en'
+import { LOCALE_STORAGE_KEY, type Locale, getStoredLocale } from '../locale'
 
-const LOCALE_STORAGE_KEY = 'lifecourse.locale'
 const TESTFLIGHT_URL = 'https://testflight.apple.com/join/9y2nCkSf'
 
 type NavCopy = {
@@ -167,8 +166,8 @@ const contentByLocale = {
   en: {
     nav: navEn,
     hero: {
-      kicker: 'GOAL TRAJECTORY SYSTEM',
-      title: 'See where execution drifts from plan.',
+      kicker: 'Goal breakdown · progress calibration · AI review',
+      title: 'LifeCourse — goal calibration & review',
       lead: 'LifeCourse breaks goals into milestones, compares real progress with expected progress, and helps teams correct direction before delays compound.',
       tags: ['Actual vs Expected', 'Delta at task level', 'Forecast ahead / delayed'],
       primaryCta: 'Join beta',
@@ -307,7 +306,7 @@ const contentByLocale = {
 } as const
 
 export default function LandingPage() {
-  const [locale, setLocale] = useState<Locale>('zh')
+  const [locale, setLocale] = useState<Locale>(() => getStoredLocale())
   const [reduceMotion, setReduceMotion] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
@@ -317,13 +316,6 @@ export default function LandingPage() {
     list: new URL('../assets/demo/list.PNG', import.meta.url).href,
     subProgress: new URL('../assets/demo/subProgress.PNG', import.meta.url).href,
   } as const
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem(LOCALE_STORAGE_KEY)
-    if (saved === 'zh' || saved === 'en') {
-      setLocale(saved)
-    }
-  }, [])
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -513,20 +505,22 @@ export default function LandingPage() {
                 <h2>{t.finalCta.title}</h2>
                 <p>{t.finalCta.lead}</p>
               </div>
-              <div className="lp-cta-side">
-                <div className="lp-beta-qr">
-                  <div className="lp-beta-qr-copy">
-                    <strong>{t.finalCta.qrTitle}</strong>
-                    <span>{t.finalCta.qrHint}</span>
+              {locale === 'zh' ? (
+                <div className="lp-cta-side">
+                  <div className="lp-beta-qr">
+                    <div className="lp-beta-qr-copy">
+                      <strong>{t.finalCta.qrTitle}</strong>
+                      <span>{t.finalCta.qrHint}</span>
+                    </div>
+                    <a href={TESTFLIGHT_URL} target="_blank" rel="noreferrer" className="lp-beta-qr-trigger" aria-label={t.finalCta.qrAlt}>
+                      <img src={testGroupQRCode} alt={t.finalCta.qrAlt} className="lp-beta-qr-image" />
+                      <span className="lp-beta-qr-preview" aria-hidden>
+                        <img src={testGroupQRCode} alt="" />
+                      </span>
+                    </a>
                   </div>
-                  <a href={TESTFLIGHT_URL} target="_blank" rel="noreferrer" className="lp-beta-qr-trigger" aria-label={t.finalCta.qrAlt}>
-                    <img src={testGroupQRCode} alt={t.finalCta.qrAlt} className="lp-beta-qr-image" />
-                    <span className="lp-beta-qr-preview" aria-hidden>
-                      <img src={testGroupQRCode} alt="" />
-                    </span>
-                  </a>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </section>
