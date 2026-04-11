@@ -8,27 +8,18 @@ const LOCALE_STORAGE_KEY = 'lifecourse.locale'
 const TESTFLIGHT_URL = 'https://testflight.apple.com/join/9y2nCkSf'
 
 type NavCopy = {
-  features: string
-  howItWorks: string
-  insights: string
   privacy: string
   terms: string
   cta: string
 }
 
 const navZh: NavCopy = {
-  features: '核心能力',
-  howItWorks: '运行方式',
-  insights: '复盘洞察',
   privacy: '隐私政策',
   terms: '用户协议',
   cta: '加入内测',
 }
 
 const navEn: NavCopy = {
-  features: 'Features',
-  howItWorks: 'How it works',
-  insights: 'Insights',
   privacy: 'Privacy',
   terms: 'Terms',
   cta: 'Start tracking',
@@ -280,9 +271,6 @@ export default function LandingPage() {
           </div>
           <div className="lp-header-tools">
             <nav className="lp-nav">
-              <a href="#features">{t.nav.features}</a>
-              <a href="#how-it-works">{t.nav.howItWorks}</a>
-              <a href="#insights">{t.nav.insights}</a>
               <Link to="/privacy">{t.nav.privacy}</Link>
               <Link to="/terms">{t.nav.terms}</Link>
               <a href={TESTFLIGHT_URL} target="_blank" rel="noreferrer" className="lp-nav-cta">
