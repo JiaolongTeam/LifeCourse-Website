@@ -7,18 +7,24 @@ import { LOCALE_STORAGE_KEY, type Locale, getStoredLocale } from '../locale'
 const TESTFLIGHT_URL = 'https://testflight.apple.com/join/9y2nCkSf'
 
 type NavCopy = {
+  brandName: string
+  brandIconAlt: string
   privacy: string
   terms: string
   cta: string
 }
 
 const navZh: NavCopy = {
+  brandName: '人生航线',
+  brandIconAlt: '人生航线应用图标',
   privacy: '隐私政策',
   terms: '用户协议',
   cta: '加入内测',
 }
 
 const navEn: NavCopy = {
+  brandName: 'LifeCourse',
+  brandIconAlt: 'LifeCourse app icon',
   privacy: 'Privacy',
   terms: 'Terms',
   cta: 'Start tracking',
@@ -342,8 +348,8 @@ export default function LandingPage() {
       <header className="lp-header">
         <div className="lp-container lp-header-inner">
           <div className="lp-brand">
-            <img src={lifeCourseIcon} alt="LifeCourse 图标" className="lp-brand-icon" />
-            <span>LifeCourse</span>
+            <img src={lifeCourseIcon} alt={t.nav.brandIconAlt} className="lp-brand-icon" />
+            <span>{t.nav.brandName}</span>
           </div>
           <div className="lp-header-tools">
             <nav className="lp-nav">
