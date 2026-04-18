@@ -4,7 +4,7 @@ import lifeCourseIcon from '../assets/lifeCourse.png'
 import testGroupQRCode from '../assets/test-group.jpeg'
 import { LOCALE_STORAGE_KEY, type Locale, getStoredLocale } from '../locale'
 
-const TESTFLIGHT_URL = 'https://testflight.apple.com/join/9y2nCkSf'
+const APP_STORE_URL = 'https://apps.apple.com/cn/app/life-course-goal-review/id6761642827'
 
 type NavCopy = {
   brandName: string
@@ -21,7 +21,7 @@ const navZh: NavCopy = {
   privacy: '隐私政策',
   terms: '用户协议',
   activities: '活动福利',
-  cta: '加入内测',
+  cta: 'App Store 下载',
 }
 
 const navEn: NavCopy = {
@@ -30,7 +30,7 @@ const navEn: NavCopy = {
   privacy: 'Privacy',
   terms: 'Terms',
   activities: 'Perks',
-  cta: 'Start tracking',
+  cta: 'App Store',
 }
 
 const contentByLocale = {
@@ -41,7 +41,7 @@ const contentByLocale = {
       title: '人生航线 - 目标校准与复盘',
       lead: 'LifeCourse 将目标拆解为里程碑，持续对比实际进度与预期进度，在延迟放大前完成路径修正。',
       tags: ['实际 vs 预期', '任务级偏差', '提前 / 延后预测'],
-      primaryCta: '加入内测',
+      primaryCta: 'App Store 下载',
       productAria: 'LifeCourse 产品界面预览',
       productTitle: '目标轨迹 / 2026 Q2 成长计划',
       productUpdated: '5 分钟前更新',
@@ -166,9 +166,9 @@ const contentByLocale = {
       kicker: '最后一步',
       title: '让目标路径保持可见，减少噪音。',
       lead: '从一个目标开始，每周校正一次轨迹。',
-      qrTitle: '扫码加入内测群',
-      qrHint: '进群后可获取内测版本与更新通知',
-      qrAlt: 'LifeCourse 内测群二维码',
+      qrTitle: '扫码加入用户群',
+      qrHint: '进群获取版本更新与使用交流',
+      qrAlt: '人生航线用户群二维码',
     },
     languageLabel: '语言',
   },
@@ -179,7 +179,7 @@ const contentByLocale = {
       title: 'LifeCourse — goal calibration & review',
       lead: 'LifeCourse breaks goals into milestones, compares real progress with expected progress, and helps teams correct direction before delays compound.',
       tags: ['Actual vs Expected', 'Delta at task level', 'Forecast ahead / delayed'],
-      primaryCta: 'Join beta',
+      primaryCta: 'Download on the App Store',
       secondaryCta: 'View product demo',
       productAria: 'LifeCourse product interface preview',
       productTitle: 'Trajectory / Q2 Personal Growth',
@@ -306,9 +306,9 @@ const contentByLocale = {
       title: 'Track your route with less noise.',
       lead: 'Start from one goal. Keep the trajectory visible every week.',
       button: 'Get early access',
-      qrTitle: 'Join beta group',
-      qrHint: 'Scan to get beta builds and release updates',
-      qrAlt: 'LifeCourse beta group QR code',
+      qrTitle: 'Join the user group',
+      qrHint: 'Scan for updates and community',
+      qrAlt: 'LifeCourse user group QR code',
     },
     languageLabel: 'Language',
   },
@@ -359,7 +359,7 @@ export default function LandingPage() {
               <Link to="/privacy">{t.nav.privacy}</Link>
               <Link to="/terms">{t.nav.terms}</Link>
               <Link to="/activities">{t.nav.activities}</Link>
-              <a href={TESTFLIGHT_URL} target="_blank" rel="noreferrer" className="lp-nav-cta">
+              <a href={APP_STORE_URL} target="_blank" rel="noreferrer" className="lp-nav-cta">
                 {t.nav.cta}
               </a>
             </nav>
@@ -396,7 +396,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <div className="lp-actions">
-                <a href={TESTFLIGHT_URL} target="_blank" rel="noreferrer" className="lp-btn lp-btn-primary">
+                <a href={APP_STORE_URL} target="_blank" rel="noreferrer" className="lp-btn lp-btn-primary">
                   {t.hero.primaryCta}
                 </a>
               </div>
@@ -522,7 +522,7 @@ export default function LandingPage() {
                       <strong>{t.finalCta.qrTitle}</strong>
                       <span>{t.finalCta.qrHint}</span>
                     </div>
-                    <a href={TESTFLIGHT_URL} target="_blank" rel="noreferrer" className="lp-beta-qr-trigger" aria-label={t.finalCta.qrAlt}>
+                    <a href={APP_STORE_URL} target="_blank" rel="noreferrer" className="lp-beta-qr-trigger" aria-label={t.finalCta.qrAlt}>
                       <img src={testGroupQRCode} alt={t.finalCta.qrAlt} className="lp-beta-qr-image" />
                       <span className="lp-beta-qr-preview" aria-hidden>
                         <img src={testGroupQRCode} alt="" />
