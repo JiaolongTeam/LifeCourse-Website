@@ -290,7 +290,8 @@
 }
 
 .act-field input[type='text'],
-.act-field input[type='url'] {
+.act-field input[type='url'],
+.act-field select.act-select {
   border: 1px solid #29292f;
   border-radius: 10px;
   padding: 10px 12px;
@@ -300,7 +301,13 @@
   outline: none;
 }
 
-.act-field input:focus {
+.act-field select.act-select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.act-field input:focus,
+.act-field select.act-select:focus {
   border-color: #205ea7;
   box-shadow: 0 0 0 1px rgba(32, 94, 167, 0.35);
 }

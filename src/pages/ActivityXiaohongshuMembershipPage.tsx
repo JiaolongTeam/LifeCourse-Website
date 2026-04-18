@@ -27,6 +27,18 @@ const rewardRows = [
   { condition: '笔记满 1000 赞', reward: '永久会员' },
 ] as const
 
+/** 与奖励阶梯一一对应，提交接口时使用英文字符串 */
+/** 默认：首次参加（对应奖励阶梯第一档） */
+const DEFAULT_ACTIVITY_OPTION = 'first_post_24h' as const
+
+const activityOptions = [
+  { value: 'first_post_24h', label: '首次发布笔记并保留至少 24 小时 → 14 天会员' },
+  { value: 'likes_50', label: '笔记满 50 赞 → 1 个月会员' },
+  { value: 'likes_100', label: '笔记满 100 赞 → 3 个月会员' },
+  { value: 'likes_500', label: '笔记满 500 赞 → 1 年会员' },
+  { value: 'likes_1000', label: '笔记满 1000 赞 → 永久会员' },
+] as const
+
 const labels = {
   backLink: '← 活动列表',
   kicker: '活动详情',
@@ -42,6 +54,8 @@ const labels = {
   step2: '发布笔记，确认已包含「人生航线」，并保存笔记链接。',
   step3: '保留笔记至少 24 小时后，回到本页提交笔记链接。',
   formTitle: '提交参与活动',
+  labelActivityOption: '参与的奖励档位',
+  errActivityOption: '请选择参与的奖励档位。',
   labelRcId: '用户ID',
   rcIdExampleAlt: '人生航线 App 付费页「恢复购买」界面示意',
   rcIdHint: '打开付费页，点击「恢复购买」按钮自动拷贝用户ID，复制进表单内。',
@@ -61,10 +75,13 @@ const labels = {
   errSubmit: '提交失败，请稍后重试或联系管理员。',
 } as const
 
-function buildSummary(rcId: string, noteUrl: string) {
+function buildSummary(activityOptionValue: string, rcId: string, noteUrl: string) {
+  const tierLabel =
+    activityOptions.find((o) => o.value === activityOptionValue)?.label ?? activityOptionValue
   return [
     '【人生航线 · 小红书活动提交】',
     `活动：发小红书送会员（${ACTIVITY_ID}）`,
+    `参与档位：${tierLabel}（${activityOptionValue}）`,
     `用户ID：${rcId}`,
     `小红书链接：${noteUrl}`,
     `提交时间：${new Date().toLocaleString('zh-CN')}`,
@@ -72,6 +89,7 @@ function buildSummary(rcId: string, noteUrl: string) {
 }
 
 export default function ActivityXiaohongshuMembershipPage() {
+  const [activityOption, setActivityOption] = useState<string>(DEFAULT_ACTIVITY_OPTION)
   const [rcId, setRcId] = useState('')
   const [noteUrl, setNoteUrl] = useState('')
   const [confirmed, setConfirmed] = useState(false)
@@ -83,6 +101,11 @@ export default function ActivityXiaohongshuMembershipPage() {
     e.preventDefault()
     setFeedback(null)
     setCopyText(null)
+
+    if (!activityOption.trim()) {
+      setFeedback({ kind: 'error', message: labels.errActivityOption })
+      return
+    }
 
     const trimmedRc = rcId.trim()
     if (!trimmedRc) {
@@ -105,7 +128,7 @@ export default function ActivityXiaohongshuMembershipPage() {
     }
 
     const submitUrl = resolveXiaohongshuActivitySubmitUrl()
-    const summary = buildSummary(trimmedRc, trimmed)
+    const summary = buildSummary(activityOption, trimmedRc, trimmed)
 
     setBusy(true)
     try {
@@ -113,6 +136,7 @@ export default function ActivityXiaohongshuMembershipPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          activity_option: activityOption,
           rc_id: trimmedRc,
           xiaohongshu_link: trimmed,
         }),
@@ -205,6 +229,24 @@ export default function ActivityXiaohongshuMembershipPage() {
 
             <form className="act-form" onSubmit={handleSubmit} noValidate>
               <h2>{labels.formTitle}</h2>
+
+              <div className="act-field">
+                <label htmlFor="act-activity-option">{labels.labelActivityOption}</label>
+                <select
+                  id="act-activity-option"
+                  name="activity_option"
+                  className="act-select"
+                  value={activityOption}
+                  onChange={(ev) => setActivityOption(ev.target.value)}
+                  required
+                >
+                  {activityOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               <div className="act-field act-field-rcid">
                 <div className="act-rc-two-col">
