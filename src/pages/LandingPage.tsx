@@ -11,6 +11,7 @@ type NavCopy = {
   brandIconAlt: string
   privacy: string
   terms: string
+  activities: string
   cta: string
 }
 
@@ -19,6 +20,7 @@ const navZh: NavCopy = {
   brandIconAlt: '人生航线应用图标',
   privacy: '隐私政策',
   terms: '用户协议',
+  activities: '活动福利',
   cta: '加入内测',
 }
 
@@ -27,6 +29,7 @@ const navEn: NavCopy = {
   brandIconAlt: 'LifeCourse app icon',
   privacy: 'Privacy',
   terms: 'Terms',
+  activities: 'Perks',
   cta: 'Start tracking',
 }
 
@@ -355,6 +358,7 @@ export default function LandingPage() {
             <nav className="lp-nav">
               <Link to="/privacy">{t.nav.privacy}</Link>
               <Link to="/terms">{t.nav.terms}</Link>
+              <Link to="/activities">{t.nav.activities}</Link>
               <a href={TESTFLIGHT_URL} target="_blank" rel="noreferrer" className="lp-nav-cta">
                 {t.nav.cta}
               </a>
