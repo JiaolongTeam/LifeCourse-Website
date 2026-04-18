@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import rcIdExample from '../assets/activity/rc_id_example.png'
+import devVxQr from '../assets/activity/dev_vx.jpg'
 import '../styles/privacy.css'
 import '../styles/activities.css'
 
@@ -19,25 +20,17 @@ function resolveXiaohongshuActivitySubmitUrl(): string {
   return XIAOHONGSHU_ACTIVITY_API_PATH
 }
 
-const rewardRows = [
-  { condition: '首次发布笔记，并保留至少 24 小时', reward: '14 天会员' },
-  { condition: '笔记满 50 赞', reward: '1 个月会员' },
-  { condition: '笔记满 100 赞', reward: '3 个月会员' },
-  { condition: '笔记满 500 赞', reward: '1 年会员' },
-  { condition: '笔记满 1000 赞', reward: '永久会员' },
+/** 奖励阶梯唯一数据源：表格两列 + 下拉选项文案 + 提交 activity_option 的 id 均由此派生 */
+const REWARD_TIERS = [
+  { id: 'first_post_24h', condition: '首次发布笔记，并保留至少 24 小时', reward: '14 天会员' },
+  { id: 'likes_50', condition: '笔记满 50 赞', reward: '1 个月会员' },
+  { id: 'likes_100', condition: '笔记满 100 赞', reward: '3 个月会员' },
+  { id: 'likes_500', condition: '笔记满 300 赞', reward: '1 年会员' },
+  { id: 'likes_1000', condition: '笔记满 1000 赞', reward: '永久会员' },
 ] as const
 
-/** 与奖励阶梯一一对应，提交接口时使用英文字符串 */
-/** 默认：首次参加（对应奖励阶梯第一档） */
-const DEFAULT_ACTIVITY_OPTION = 'first_post_24h' as const
-
-const activityOptions = [
-  { value: 'first_post_24h', label: '首次发布笔记并保留至少 24 小时 → 14 天会员' },
-  { value: 'likes_50', label: '笔记满 50 赞 → 1 个月会员' },
-  { value: 'likes_100', label: '笔记满 100 赞 → 3 个月会员' },
-  { value: 'likes_500', label: '笔记满 500 赞 → 1 年会员' },
-  { value: 'likes_1000', label: '笔记满 1000 赞 → 永久会员' },
-] as const
+/** 默认：首次参加（第一档） */
+const DEFAULT_ACTIVITY_OPTION = REWARD_TIERS[0].id
 
 const labels = {
   backLink: '← 活动列表',
@@ -50,8 +43,9 @@ const labels = {
   sectionRewards: '奖励阶梯',
   rewardColCondition: '条件',
   rewardColBenefit: '会员权益',
-  step1: '打开小红书，撰写与「人生航线」相关的真实使用体验或介绍。',
-  step2: '发布笔记，确认已包含「人生航线」，并保存笔记链接。',
+  rewardDisclaimer: '声明：单用户同阶梯奖励只能领取一次。',
+  step1: '打开小红书，撰写与「人生航线app」相关的真实使用体验或介绍。',
+  step2: '发布笔记，确认已包含「人生航线app」，并保存笔记链接。',
   step3: '保留笔记至少 24 小时后，回到本页提交笔记链接。',
   formTitle: '提交参与活动',
   labelActivityOption: '参与的奖励档位',
@@ -62,7 +56,7 @@ const labels = {
   rcIdPlaceholder: '例如：$RCxxxxxxxx',
   labelUrl: '小红书笔记链接',
   urlPlaceholder: 'https://www.xiaohongshu.com/...',
-  checkLabel: '我已确认笔记包含「人生航线」，并将至少保留 24 小时。',
+  checkLabel: '我已确认笔记包含「人生航线app」相关内容，并将至少保留 24 小时。',
   submit: '提交活动',
   submitting: '提交中…',
   errRcId: '请填写用户ID。',
@@ -73,11 +67,14 @@ const labels = {
   successClipboardDetail: '如未自动复制，可手动复制下方文本。',
   errSubmitCopied: '提交失败，摘要已复制到剪贴板，可联系管理员或稍后重试。',
   errSubmit: '提交失败，请稍后重试或联系管理员。',
+  devContactTitle: '有疑问联系开发者',
+  devContactHint: '微信扫码添加，咨询活动与提交问题。',
+  devQrAlt: '开发者联系二维码',
 } as const
 
 function buildSummary(activityOptionValue: string, rcId: string, noteUrl: string) {
-  const tierLabel =
-    activityOptions.find((o) => o.value === activityOptionValue)?.label ?? activityOptionValue
+  const tier = REWARD_TIERS.find((t) => t.id === activityOptionValue)
+  const tierLabel = tier ? `${tier.condition} → ${tier.reward}` : activityOptionValue
   return [
     '【人生航线 · 小红书活动提交】',
     `活动：发小红书送会员（${ACTIVITY_ID}）`,
@@ -216,8 +213,8 @@ export default function ActivityXiaohongshuMembershipPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {rewardRows.map((row) => (
-                      <tr key={row.condition}>
+                    {REWARD_TIERS.map((row) => (
+                      <tr key={row.id}>
                         <td>{row.condition}</td>
                         <td>{row.reward}</td>
                       </tr>
@@ -225,6 +222,7 @@ export default function ActivityXiaohongshuMembershipPage() {
                   </tbody>
                 </table>
               </div>
+              <p className="act-reward-disclaimer">{labels.rewardDisclaimer}</p>
             </section>
 
             <form className="act-form" onSubmit={handleSubmit} noValidate>
@@ -240,9 +238,9 @@ export default function ActivityXiaohongshuMembershipPage() {
                   onChange={(ev) => setActivityOption(ev.target.value)}
                   required
                 >
-                  {activityOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
+                  {REWARD_TIERS.map((tier) => (
+                    <option key={tier.id} value={tier.id}>
+                      {tier.condition} → {tier.reward}
                     </option>
                   ))}
                 </select>
@@ -306,6 +304,26 @@ export default function ActivityXiaohongshuMembershipPage() {
                 </div>
               ) : null}
             </form>
+
+            <section className="act-dev-contact" aria-labelledby="act-dev-contact-title">
+              <div className="act-dev-contact-bar">
+                <div className="act-dev-contact-copy">
+                  <strong id="act-dev-contact-title">{labels.devContactTitle}</strong>
+                  <span>{labels.devContactHint}</span>
+                </div>
+                <span
+                  className="act-dev-contact-trigger"
+                  tabIndex={0}
+                  role="group"
+                  aria-label={labels.devQrAlt}
+                >
+                  <img src={devVxQr} alt="" className="act-dev-contact-thumb" loading="lazy" />
+                  <span className="act-dev-contact-preview" aria-hidden>
+                    <img src={devVxQr} alt="" />
+                  </span>
+                </span>
+              </div>
+            </section>
           </div>
         </div>
       </main>
