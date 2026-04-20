@@ -24,9 +24,8 @@ function resolveXiaohongshuActivitySubmitUrl(): string {
 const REWARD_TIERS = [
   { id: 'first_post_24h', condition: '首次发布笔记，并保留至少 24 小时', reward: '1 个月会员' },
   { id: 'likes_10', condition: '笔记满 10 赞', reward: '1 个月会员' },
-  { id: 'likes_100', condition: '笔记满 100 赞', reward: '3 个月会员' },
-  { id: 'likes_500', condition: '笔记满 300 赞', reward: '1 年会员' },
-  { id: 'likes_1000', condition: '笔记满 500 赞', reward: '永久会员' },
+  { id: 'likes_100', condition: '笔记满 100 赞', reward: '1 年会员' },
+  { id: 'likes_300', condition: '笔记满 300 赞', reward: '永久会员' },
 ] as const
 
 /** 默认：首次参加（第一档） */
